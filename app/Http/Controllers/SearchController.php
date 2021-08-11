@@ -19,7 +19,7 @@ class SearchController extends Controller
     public function query(Request $request)
     {
         if($request->has('search')){
-            $posts = Post::search($request->get($request->search))->get();
+            $posts = Post::search($request->search)->get();
         }else{
             $posts = Post::get();
         }

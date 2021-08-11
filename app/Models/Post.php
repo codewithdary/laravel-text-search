@@ -9,16 +9,24 @@ use Laravel\Scout\Searchable;
 
 class Post extends Model
 {
-    use HasFactory;
-    use Sluggable;
-    use Searchable;
+    use HasFactory, Sluggable, Searchable;
 
     protected $fillable = ['title', 'slug', 'description', 'image_path', 'user_id'];
-    protected $dates = ['created_at', 'updated_at'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Get the index name for the model.
+     *
+     * @return string
+     */
+    public function searchableAs()
+    {
+        return 'posts';
     }
 
     public function sluggable(): array

@@ -21,8 +21,15 @@
     <form action="/search/query" method="GET">
         @csrf
 
-        <input type="text" name="search" placeholder="Search..." class="pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium">
-        <button type="submit" class="bg-green-500 uppercase bg-transparent text-gray-100 text-xs font-extrabold py-3 px-5 rounded-3xl">
+        <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            class="pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium">
+
+        <button
+            type="submit"
+            class="bg-green-500 uppercase bg-transparent text-gray-100 text-xs font-extrabold py-3 px-5 rounded-3xl">
             Submit
         </button>
     </form>
