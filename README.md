@@ -19,9 +19,7 @@ php artisan serve
 
 ## Database Setup <br>
 
-We are going to use a composer package that will search text through your Eloquent models. Let’s set up our database.
-
-First, make sure that your database credentials are setup in the .env file
+We are going to use a composer package that will search text through your Eloquent models. Make sure that your database credentials are setup in the .env file
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
