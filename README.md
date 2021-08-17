@@ -69,3 +69,99 @@ Navigate to the dashboard of Algolia, and click on the “API KEYS” menu item.
 ALGOLIA_APP_ID=""
 ALGOLIA_SECRET_ID=""
 ```
+
+## Marking your model for indexing
+
+The next setup is marking our model for indexing. This can be done through the Searchable trait that we need to add inside the desired model (Post model in our case). 
+
+Open the ```/app/Models/Post.php``` file and add the Searchable trait inside the Post class.
+```ruby
+use HasFactory, Sluggable, Searchable;
+```
+
+Also, make sure that you pull in the Searchable class inside the use statement above the class.
+```ruby
+use Laravel\Scout\Searchable;
+```
+
+The Searchable trait has tons of methods that you can use and it’s actually too much to cover them inside the tutorial, if you are interested in them, you can navigate to the ```/vendor/Laravel/scout/Searchable.php``` file. 
+
+It’s optional to define a method inside your model called searchableAs, which will define the model you want to search through. I usually add it to prevent misconfusion.
+
+```ruby
+public function searchableAs()
+{
+    return 'posts';
+}
+```
+
+## Creating our Search Controller
+You can add the search query inside the PostsController but I recommend you to create a separate Controller which will do the searching for you.
+```
+php artisan make:controller SearchController
+```
+
+In here, we need to make sure that we create a new function which will do the check if the post exists, and returns it back to the view.
+```ruby
+public function query(Request $request)
+{
+    if($request->has('search')) {
+        $posts = Post::search($request->search)->get();
+    } else {
+        $posts = Post::get();
+    }
+
+    return view('search.index', [
+        'posts' => $posts
+    ]);
+}
+```
+
+We are returning a view right here which does not exist, make sure that you create a folder called ```search``` with an ```index.blade.php``` file inside the ```/resources/views``` folder.
+
+We can define the route as well inside the ```/routes/web.php``` file
+```ruby
+Route::get('/search/query', [SearchController::class, 'query']);
+```
+
+## Adding our frontend!
+The last step is to make sure that we add a input fields and submit button on our frontend where users can add a post name that they want to search through. Below our session check inside the ```/resources/views/blog/index.blade.php```, let’s add:
+```ruby
+<div class="pt-15 w-4/5 m-auto">
+    <form action="/search/query" method="GET">
+        @csrf
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            class="pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium">
+
+        <button
+            type="submit"
+            class="bg-green-500 uppercase bg-transparent text-gray-100 text-xs font-extrabold py-3 px-5 rounded-3xl">
+            Submit
+        </button>
+    </form>
+</div>
+```
+
+Obviously, the view we want to navigate users to does not exist yet, so you can copy paste the entire ```/resources/views/blog/index.blade.php``` file inside the ```/resources/views/search/index.blade.php``` file, and change the ```<h1>``` to:
+```ruby
+<h1 class="text-6xl">
+    Search blog posts...
+</h1>
+```
+
+Inside the controller, we said that we want to return the same array that we receive inside the ```/resources/views/blog/index.blade.php```, so we don’t need to change up anything!
+
+## Import existing posts
+By default, the existing records in the database will not be imported into Algolia, only records that we created after we started using Algolia. There is a command that makes sure that we import old posts into Algolia.
+```
+Php artisan scout:import “App\Models\Post”
+```
+
+With one command, all existing posts are imported into Algolia and they are all searchable!
+    
+# Credits due where credits due…
+Thanks to [Laravel](https://laravel.com/) for giving me the opportunity to make this tutorial on [Laravel Scout](https://laravel.com/docs/8.x/scout).
