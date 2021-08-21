@@ -156,7 +156,7 @@ Inside the controller, we said that we want to return the same array that we rec
 ## Import existing posts
 By default, the existing records in the database will not be imported into Algolia, only records that we created after we started using Algolia. There is a command that makes sure that we import old posts into Algolia.
 ```
-Php artisan scout:import “App\Models\Post”
+php artisan scout:import “App\Models\Post”
 ```
 
 With one command, all existing posts are imported into Algolia and they are all searchable!
